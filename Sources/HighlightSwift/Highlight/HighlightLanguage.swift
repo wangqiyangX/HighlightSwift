@@ -1,4 +1,4 @@
-public enum HighlightLanguage: String, Sendable {
+public enum HighlightLanguage: String, Sendable, CaseIterable {
     var alias: String {
         switch self {
         case .cPlusPlus: return "cpp"
@@ -19,6 +19,7 @@ public enum HighlightLanguage: String, Sendable {
     case bash
     case basic
     case c
+    case cobol
     case cPlusPlus
     case cSharp
     case clojure
@@ -31,6 +32,7 @@ public enum HighlightLanguage: String, Sendable {
     case elixir
     case elm
     case erlang
+    case fortran
     case gherkin
     case go
     case gradle
@@ -57,12 +59,14 @@ public enum HighlightLanguage: String, Sendable {
     case phpTemplate
     case plaintext
     case postgreSQL
+    case prolog
     case protocolBuffers
     case python
     case pythonRepl
     case r
     case ruby
     case rust
+    case sas
     case scala
     case scss
     case shell
@@ -70,6 +74,7 @@ public enum HighlightLanguage: String, Sendable {
     case swift
     case toml
     case typeScript
+    case vbScript
     case visualBasic
     case webAssembly
     case yaml

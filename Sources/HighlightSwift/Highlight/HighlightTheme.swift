@@ -19,6 +19,7 @@ public enum HighlightTheme: String, CaseIterable, Identifiable, Equatable {
     case papercolor = "Papercolor"
     case paraiso = "Paraiso"
     case qtcreator = "QT Creator"
+    case rosePine = "Rose Pine"
     case silk = "Silk"
     case solarFlare = "Solar Flare"
     case solarized = "Solarized"

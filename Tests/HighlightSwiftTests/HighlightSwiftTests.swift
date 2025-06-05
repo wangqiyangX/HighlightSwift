@@ -56,7 +56,7 @@ final class HighlightSwiftTests: XCTestCase {
         """
         let result = try await highlight.request(swiftCode, colors: .custom(css: customCSS))
         XCTAssertFalse(result.isUndefined)
-        XCTAssertEqual(result.relevance, 15)
+        XCTAssertEqual(result.relevance, 18)
         XCTAssertEqual(result.language, "swift")
         XCTAssertEqual(result.languageName, "Swift")
         XCTAssertEqual(result.attributedText.characters.count, 477)
@@ -65,7 +65,7 @@ final class HighlightSwiftTests: XCTestCase {
     func testAutomaticLanguage() async throws {
         let result = try await highlight.request(swiftCode)
         XCTAssertFalse(result.isUndefined)
-        XCTAssertEqual(result.relevance, 15)
+        XCTAssertEqual(result.relevance, 18)
         XCTAssertEqual(result.language, "swift")
         XCTAssertEqual(result.languageName, "Swift")
         XCTAssertEqual(result.attributedText.characters.count, 477)
@@ -74,7 +74,7 @@ final class HighlightSwiftTests: XCTestCase {
     func testCorrectLanguage() async throws {
         let result = try await highlight.request(swiftCode, mode: .language(.swift))
         XCTAssertFalse(result.isUndefined)
-        XCTAssertEqual(result.relevance, 15)
+        XCTAssertEqual(result.relevance, 18)
         XCTAssertEqual(result.language, "swift")
         XCTAssertEqual(result.languageName, "Swift")
         XCTAssertEqual(result.attributedText.characters.count, 477)
@@ -83,7 +83,7 @@ final class HighlightSwiftTests: XCTestCase {
     func testCorrectLanguageAlias() async throws {
         let result = try await highlight.request(swiftCode, mode: .languageAlias("swift"))
         XCTAssertFalse(result.isUndefined)
-        XCTAssertEqual(result.relevance, 15)
+        XCTAssertEqual(result.relevance, 18)
         XCTAssertEqual(result.language, "swift")
         XCTAssertEqual(result.languageName, "Swift")
         XCTAssertEqual(result.attributedText.characters.count, 477)
