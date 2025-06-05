@@ -3,47 +3,65 @@ import SwiftUI
 @available(iOS 16.1, tvOS 16.1, *)
 extension CodeText: View {
     public var body: some View {
-        Text(attributedText)
-            .fontDesign(.monospaced)
+        VStack(alignment: .leading) {
+            if let fileName {
+                Text(fileName)
+                    .font(headerStyle.font)
+                    .foregroundStyle(headerStyle.foregroundStyle)
+                    .padding([.leading, .top], 8)
+                Divider()
+            }
+            ScrollView(.horizontal) {
+                Text(attributedText)
+            }
+            .scrollIndicators(.hidden)
             .padding(.vertical, style.verticalPadding)
             .padding(.horizontal, style.horizontalPadding)
-            .background {
-                if let cardStyle = style as? CardCodeTextStyle {
-                    CodeTextCardView(
-                        style: cardStyle,
-                        color: highlightResult?.backgroundColor
-                    )
-                }
+        }
+        .fontDesign(.monospaced)
+        .textSelection(.enabled)
+        .background {
+            if let cardStyle = style as? CardCodeTextStyle {
+                CodeTextCardView(
+                    style: cardStyle,
+                    color: highlightResult?.backgroundColor
+                )
             }
-            .onAppear {
-                guard highlightResult == nil else {
-                    return
-                }
-                highlightTask = Task {
-                    await highlightText()
-                }
+        }
+        .onAppear {
+            guard highlightResult == nil else {
+                return
             }
-            .onDisappear {
-                highlightTask?.cancel()
+            highlightTask = Task {
+                await highlightText()
             }
-            .onChange(of: mode) { newMode in
-                highlightTask?.cancel()
-                highlightTask = Task {
-                    await highlightText(mode: newMode)
-                }
+        }
+        .onDisappear {
+            highlightTask?.cancel()
+        }
+        .onChange(of: mode) { oldMode, newMode in
+            highlightTask?.cancel()
+            highlightTask = Task {
+                await highlightText(mode: newMode)
             }
-            .onChange(of: colors) { newColors in
-                highlightTask?.cancel()
-                highlightTask = Task {
-                    await highlightText(colors: newColors)
-                }
+        }
+        .onChange(of: colors) { oldColors, newColors in
+            highlightTask?.cancel()
+            highlightTask = Task {
+                await highlightText(colors: newColors)
             }
-            .onChange(of: colorScheme) { newColorScheme in
-                highlightTask?.cancel()
-                highlightTask = Task {
-                    await highlightText(colorScheme: newColorScheme)
-                }
+        }
+        .onChange(of: colorScheme) { oldColorScheme, newColorScheme in
+            highlightTask?.cancel()
+            highlightTask = Task {
+                await highlightText(colorScheme: newColorScheme)
             }
+        }
+        .onChange(of: text) { oldText, newText in
+            highlightTask = Task {
+                await highlightText()
+            }
+        }
     }
 }
 
@@ -51,55 +69,49 @@ extension CodeText: View {
 
 @available(iOS 16.1, tvOS 16.1, *)
 private struct PreviewCodeText: View {
-    @State var colors: CodeTextColors = .theme(.xcode)
-    @State var font: Font = .body
+    @State var language: HighlightLanguage = .swift
+    @State var theme: HighlightTheme = .rosePine
 
-    let code: String = """
-    import SwiftUI
-    
-    struct SwiftUIView: View {
-        var body: some View {
-            Text("Hello World!")
-        }
-    }
-    """
-    
+    @State var currentValue: Double = 2.0
+
     var body: some View {
         List {
-            CodeText(code)
-                .codeTextStyle(.card)
-                .codeTextColors(colors)
-                .highlightLanguage(.swift)
-                .font(font)
-            Button {
-                withAnimation {
-                    colors = .theme(randomTheme())
-                    font = randomFont()
+            CodeText(
+                """
+                import SwiftUI
+
+                struct SwiftUIView: View {
+                    var body: some View {
+                        Text("Hello World!")
+                            .font(.system(size: \(currentValue)))
+                    }
                 }
-            } label: {
-                Text("Random")
+                """,
+                fileName: "demo.swift"
+            )
+            .codeTextStyle(.card)
+            .codeTextColors(.theme(theme))
+            .highlightLanguage(language)
+            .listRowInsets(EdgeInsets())
+
+            Section("Control") {
+                Picker("Language", selection: $language) {
+                    ForEach(HighlightLanguage.allCases, id: \.self) { lang in
+                        Text(lang.alias)
+                            .tag(lang.alias)
+                    }
+                }
+                Picker("Theme", selection: $theme) {
+                    ForEach(HighlightTheme.allCases, id: \.self) { theme in
+                        Text(theme.rawValue)
+                            .tag(theme)
+                    }
+                }
+                Slider(value: $currentValue, in: 0...10, step: 1) {
+                    Text("Curret Value")
+                }
             }
         }
-    }
-    
-    func randomTheme() -> HighlightTheme {
-        let cases = HighlightTheme.allCases
-        return cases[.random(in: 0..<cases.count)]
-    }
-    
-    func randomFont() -> Font {
-        let cases: [Font] = [
-            .body,
-            .callout,
-            .caption,
-            .caption2,
-            .footnote,
-            .headline,
-            .largeTitle,
-            .subheadline,
-            .title
-        ]
-        return cases[.random(in: 0..<cases.count)]
     }
 }
 

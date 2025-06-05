@@ -7,6 +7,12 @@ extension CodeText {
         return content
     }
     
+    public func codeTextHeaderStyle<S>(_ style: S) -> CodeText where S : CodeTextHeaderStyle {
+        var content = self
+        content.headerStyle = style
+        return content
+    }
+    
     /// Sets the highlight color theme for this code text.
     public func codeTextColors(_ colors: CodeTextColors) -> CodeText {
         var content = self

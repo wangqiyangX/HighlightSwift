@@ -2,10 +2,12 @@ import SwiftUI
 
 @available(iOS 16.1, tvOS 16.1, *)
 public struct CodeText {
-    private let text: String
+    internal let text: String
     
+    internal var fileName: String?
     internal var mode: HighlightMode = .automatic
     internal var style: CodeTextStyle = .plain
+    internal var headerStyle: CodeTextHeaderStyle = .default
     internal var colors: CodeTextColors = .theme(.xcode)
     
     internal var success: ((HighlightResult) -> Void)?
@@ -22,8 +24,9 @@ public struct CodeText {
     /// - Parameters:
     ///   - text: Plain text code to be syntax highlighted and displayed.
     ///   - result: Existing highlight result to display instead of highlighting the text on appear.
-    public init(_ text: String, result: HighlightResult? = nil) {
+    public init(_ text: String, fileName: String? = nil, result: HighlightResult? = nil) {
         self.text = text
+        self.fileName = fileName
         self._highlightResult = .init(initialValue: result)
     }
     
