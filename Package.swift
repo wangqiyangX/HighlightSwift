@@ -5,9 +5,9 @@ import PackageDescription
 let package = Package(
     name: "HighlightSwift",
     platforms: [
-        .iOS(.v15),
+        .iOS(.v17),
         .tvOS(.v15),
-        .macOS(.v13)
+        .macOS(.v14)
     ],
     products: [
         .library(
