@@ -58,6 +58,7 @@ extension CodeText: View {
             }
         }
         .onChange(of: text) { oldText, newText in
+            highlightTask?.cancel()
             highlightTask = Task {
                 await highlightText()
             }
