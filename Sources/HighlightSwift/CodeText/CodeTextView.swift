@@ -11,10 +11,16 @@ extension CodeText: View {
                     .padding([.leading, .top], 8)
                 Divider()
             }
-            ScrollView(.horizontal) {
-                Text(attributedText)
+            Group {
+                if isScrolling {
+                    ScrollView(.horizontal) {
+                        Text(attributedText)
+                    }
+                    .scrollIndicators(.hidden)
+                } else {
+                    Text(attributedText)
+                }
             }
-            .scrollIndicators(.hidden)
             .padding(.vertical, style.verticalPadding)
             .padding(.horizontal, style.horizontalPadding)
         }
